@@ -256,34 +256,41 @@ namespace MyAddin1
             try
             {
                 MyVars objMyVars = new MyVars();
-                string VarValue = objMyVars.MyVar;
-                       
-                document = ((DTE2)ServiceCache.ExtensibilityModel).ActiveDocument;
-                var textDocument = (TextDocument)document.Object("TextDocument");
+                VarValue = objMyVars.MyVar;
+                enableApp = objMyVars.enabled;
                 
+                if (enableApp)
+                {
+                    document = ((DTE2)ServiceCache.ExtensibilityModel).ActiveDocument;
+                    var textDocument = (TextDocument)document.Object("TextDocument");
 
-                //selected text to execute
-                OriginalQueryText = textDocument.Selection.Text;
+
+                    //selected text to execute
+                    OriginalQueryText = textDocument.Selection.Text;
+
+
+                    if (string.IsNullOrEmpty(OriginalQueryText))
+                    {
+                        //There is no selection- get the whole query
+                        EditPoint OriginalStartPoint = textDocument.StartPoint.CreateEditPoint();
+
+                        OriginalQueryText = OriginalStartPoint.GetText(textDocument.EndPoint);
+                        OriginalStartPoint.Insert(" " + VarValue + " ");
+
+                        StartPoint = textDocument.StartPoint.CreateEditPoint();
+                        EndPoint = textDocument.EndPoint.CreateEditPoint();
+
+                    }
+                    else
+                    {
+                        //Selecting a specific command
+                        StartPoint = textDocument.CreateEditPoint(textDocument.Selection.TopPoint);
+                        textDocument.Selection.Text = " " + VarValue + " " + OriginalQueryText;
+                        EndPoint = textDocument.EndPoint.CreateEditPoint();
+                    }
+                }
 
                 
-                if (string.IsNullOrEmpty(OriginalQueryText))
-                {
-                    //There is no selection- get the whole query
-                    EditPoint OriginalStartPoint = textDocument.StartPoint.CreateEditPoint();
-                    
-                    OriginalQueryText = OriginalStartPoint.GetText(textDocument.EndPoint);
-                    OriginalStartPoint.Insert(" " + VarValue + " ");
-
-                    StartPoint = textDocument.StartPoint.CreateEditPoint();
-                    EndPoint = textDocument.EndPoint.CreateEditPoint();
-
-                }
-                else
-                {
-                    StartPoint = textDocument.CreateEditPoint(textDocument.Selection.TopPoint);
-                    textDocument.Selection.Text = " " + VarValue + " " + OriginalQueryText;
-                    EndPoint = textDocument.EndPoint.CreateEditPoint();
-                }
 
             }
             catch (Exception)
@@ -297,22 +304,25 @@ namespace MyAddin1
         {
             try
             {                
-                
-                var textDocument = (TextDocument)document.Object("TextDocument");
-
-                //selected text to execute
-                string queryText = textDocument.Selection.Text;
-
-
-                if (string.IsNullOrEmpty(OriginalQueryText))
+                if (enableApp)
                 {
-                    //No original query text
+                    var textDocument = (TextDocument)document.Object("TextDocument");
+
+                    //selected text to execute
+                    string queryText = textDocument.Selection.Text;
+
+
+                    if (string.IsNullOrEmpty(OriginalQueryText))
+                    {
+                        //No original query text
+                    }
+                    else
+                    {
+                        //Replace with original query              
+                        StartPoint.ReplaceText(EndPoint, OriginalQueryText, 8);
+                    }
                 }
-                else
-                {      
-                    //Replace with original query              
-                    StartPoint.ReplaceText(EndPoint, OriginalQueryText, 8);                    
-                }
+                
 
             }
             catch (Exception)
@@ -332,6 +342,9 @@ namespace MyAddin1
         private Document document;
         private EditPoint StartPoint;
         private EditPoint EndPoint;
+
+        private string VarValue;
+        private bool enableApp;
         
     }
 }

@@ -51,8 +51,8 @@ namespace MyAddin1
                 }
                 objMyVars.MyVar = DeclareVars + DeclareVal;
             }
-            
-                        
+
+            objMyVars.enabled = chkEnabled.Checked;            
             
         }
 
@@ -94,6 +94,7 @@ namespace MyAddin1
     public class MyVars
     {
         private static string mMyVar;
+        private static bool menabled;
 
         public MyVars()
         {
@@ -111,6 +112,19 @@ namespace MyAddin1
             }
 
         }
+
+        public bool enabled
+        {
+            get
+            {
+                return menabled;
+            }
+            set
+            {
+                menabled = value;
+            }
+        }
+
     }
 
 }

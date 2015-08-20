@@ -37,6 +37,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtType1 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.chkEnabled = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -117,11 +118,22 @@
             this.label4.TabIndex = 7;
             this.label4.Text = "Type";
             // 
+            // chkEnabled
+            // 
+            this.chkEnabled.AutoSize = true;
+            this.chkEnabled.Location = new System.Drawing.Point(407, 281);
+            this.chkEnabled.Name = "chkEnabled";
+            this.chkEnabled.Size = new System.Drawing.Size(64, 17);
+            this.chkEnabled.TabIndex = 8;
+            this.chkEnabled.Text = "enabled";
+            this.chkEnabled.UseVisualStyleBackColor = true;
+            // 
             // MyAddinWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Controls.Add(this.chkEnabled);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtType1);
             this.Controls.Add(this.btnAddVar);
@@ -149,5 +161,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtType1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox chkEnabled;
     }
 }
